@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+storybook-static
+*.local
+.env
+.env.*
+.vercel
+.DS_Store
+tsconfig.tsbuildinfo
+tsconfig.app.tsbuildinfo
+vite.config.js
+vite.config.d.ts
