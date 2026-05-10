@@ -15,7 +15,7 @@ export const clearRuntimeCredentials = () => {
 	runtimeCredentials = null;
 };
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const axiosClient: AxiosInstance = axios.create({
 	baseURL: API_URL,
@@ -61,31 +61,23 @@ axiosClient.interceptors.response.use(
 			switch (error.response.status) {
 				case 401:
 					await AuthService.logout();
-					// Redirect to login or show message
 					break;
 				case 403:
-					// Handle forbidden access
 					break;
 				case 404:
-					// Handle not found
 					break;
 				case 500:
-					// Handle server error
 					break;
 				default:
-					// Handle other errors
 					break;
 			}
-			// Ensure we reject with the error response data if available
-			const errorData = error.response.data;
+			const errorData = error.response?.data;
 			return Promise.reject(errorData || error);
 		} else if (error.request) {
-			// Request was made but no response received
 			console.error('No response received:', error.request);
 			return Promise.reject(new Error('No response received from server'));
 		} else {
-			// Error in setting up the request
-			console.error('Error:', error.message);
+			console.error('Error:', error?.message);
 			return Promise.reject(error);
 		}
 	},
