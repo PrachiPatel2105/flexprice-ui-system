@@ -195,6 +195,9 @@ export const RouteNames = {
 
 const DefaultRoute = () => {
 	const { user } = useUser();
+	if (!user) {
+		return <Navigate to={RouteNames.auth} />;
+	}
 	const onboardingMetadata = user?.tenant?.metadata?.[TenantMetadataKey.ONBOARDING_COMPLETED];
 	const onboardingCompleted = onboardingMetadata === 'true';
 	return <Navigate to={onboardingCompleted ? RouteNames.homeDashboard : RouteNames.onboarding} />;
@@ -232,11 +235,19 @@ export const MainRouter: any = createBrowserRouter([
 	},
 	{
 		path: RouteNames.onboarding,
-		element: <OnboardingTenant />,
+		element: (
+			<AuthMiddleware requiredRole={['admin']}>
+				<OnboardingTenant />
+			</AuthMiddleware>
+		),
 	},
 	{
 		path: RouteNames.pricingSetup,
-		element: <PricingSetupPage />,
+		element: (
+			<AuthMiddleware requiredRole={['admin']}>
+				<PricingSetupPage />
+			</AuthMiddleware>
+		),
 	},
 	{
 		path: RouteNames.checkout,
