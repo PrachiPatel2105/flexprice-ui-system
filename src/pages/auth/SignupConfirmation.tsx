@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
+import { ServerError } from '@/core/axios/types';
 
 const SignupConfirmation = () => {
 	const userContext = useUser();
@@ -23,6 +24,12 @@ const SignupConfirmation = () => {
 
 			const user = await supabase.auth.getUser();
 			userContext.setUser(user.data.user);
+
+			// No backend configured — skip signup API call and go straight to app
+			if (!import.meta.env.VITE_API_URL) {
+				navigate('/');
+				return;
+			}
 
 			if (user.data.user?.app_metadata.tenant_id) {
 				navigate('/');
@@ -48,7 +55,7 @@ const SignupConfirmation = () => {
 		},
 		onError: async (error: ServerError) => {
 			await supabase.auth.signOut();
-			toast.error(error.error.message || 'Failed to signup');
+			toast.error(error?.error?.message || 'Failed to signup');
 			navigate('/auth');
 		},
 	});
