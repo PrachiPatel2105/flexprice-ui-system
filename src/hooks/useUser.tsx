@@ -3,7 +3,8 @@ import { UserApi } from '@/api/UserApi';
 import AuthService from '@/core/auth/AuthService';
 
 const useUser = () => {
-	const tokenStr = AuthService.getAcessToken();
+	const noBackend = !import.meta.env.VITE_API_URL;
+	const tokenStr = noBackend ? null : AuthService.getAcessToken();
 
 	const {
 		data: user,
@@ -11,18 +12,16 @@ const useUser = () => {
 		error,
 		refetch,
 	} = useQuery({
-		queryKey: ['user', tokenStr],
+		queryKey: ['user', 'me'],
 		queryFn: async () => {
 			return await UserApi.me();
 		},
-		enabled: !!tokenStr,
+		enabled: !noBackend && !!tokenStr,
 		retry: 1,
 		retryDelay: 1000,
-		// gcTime: 1000 * 60 * 5,
-		// staleTime: 1000 * 60 * 5,
 	});
 
-	return { user, loading, error, refetch };
+	return { user, loading: noBackend ? false : loading, error: noBackend ? null : error, refetch };
 };
 
 export default useUser;

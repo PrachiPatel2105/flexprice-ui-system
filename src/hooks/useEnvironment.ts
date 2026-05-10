@@ -20,7 +20,7 @@ interface UseEnvironment {
 	refetchEnvironments: () => void;
 }
 
-export const useEnvironment = (pollingInterval: number = 1000): UseEnvironment => {
+export const useEnvironment = (pollingInterval: number = 30000): UseEnvironment => {
 	// Fetch environments from API
 	const { data, isLoading, isError, refetch } = useQuery({
 		queryKey: ['environments'],

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Page } from '@/components/atoms';
 import { Skeleton } from '@/components/ui';
@@ -97,8 +97,13 @@ const DashboardPage = () => {
 		refetchOnMount: true,
 	});
 
+	const monitoringErrorShown = useRef(false);
+	const subscriptionsErrorShown = useRef(false);
+	const invoiceErrorShown = useRef(false);
+
 	useEffect(() => {
-		if (monitoringError) {
+		if (monitoringError && !monitoringErrorShown.current) {
+			monitoringErrorShown.current = true;
 			toast.error('Error fetching monitoring data');
 		}
 	}, [monitoringError]);
@@ -113,12 +118,17 @@ const DashboardPage = () => {
 		return 'Updated just now';
 	};
 
-	// Handle errors
+	// Handle errors — fire only once
 	useEffect(() => {
-		if (subscriptionsError) toast.error('Error fetching subscription data');
-		// if (revenueError) toast.error('Error fetching revenue data');
-		invoiceErrors.forEach(() => toast.error('Error fetching invoice data'));
-	}, [subscriptionsError, /* revenueError, */ invoiceErrors]);
+		if (subscriptionsError && !subscriptionsErrorShown.current) {
+			subscriptionsErrorShown.current = true;
+			toast.error('Error fetching subscription data');
+		}
+		if (invoiceErrors.length > 0 && !invoiceErrorShown.current) {
+			invoiceErrorShown.current = true;
+			toast.error('Error fetching invoice data');
+		}
+	}, [subscriptionsError, invoiceErrors]);
 
 	// Skeleton loader for Events Monitoring Chart
 	const EventsMonitoringChartSkeleton = () => (
