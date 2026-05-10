@@ -110,6 +110,10 @@ const OnboardingTenant = () => {
 
 	const { mutate: completeOnboarding, isPending } = useMutation({
 		mutationFn: async () => {
+			// Skip API calls if no backend is configured
+			if (!import.meta.env.VITE_API_URL) {
+				return;
+			}
 			await TenantApi.updateTenant({
 				name: orgName.trim(),
 				metadata: {
