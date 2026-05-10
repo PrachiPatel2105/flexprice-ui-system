@@ -8,10 +8,12 @@ interface Props {
 }
 
 const isProd = import.meta.env.VITE_APP_ENVIRONMENT === 'prod';
+const posthogKey = import.meta.env.VITE_APP_PUBLIC_POSTHOG_KEY;
+const posthogHost = import.meta.env.VITE_APP_PUBLIC_POSTHOG_HOST;
 
-if (isProd) {
-	posthog.init(import.meta.env.VITE_APP_PUBLIC_POSTHOG_KEY!, {
-		api_host: import.meta.env.VITE_APP_PUBLIC_POSTHOG_HOST,
+if (isProd && posthogKey) {
+	posthog.init(posthogKey, {
+		api_host: posthogHost,
 		capture_pageview: true,
 	});
 

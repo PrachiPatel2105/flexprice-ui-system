@@ -3,7 +3,12 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import { defineConfig } from 'vite';
 
-const meta = JSON.parse(fs.readFileSync('./public/meta.json', 'utf8'));
+let meta = { versionId: 'unknown' };
+try {
+	meta = JSON.parse(fs.readFileSync('./public/meta.json', 'utf8'));
+} catch {
+	// meta.json may not exist in CI/fresh clone — use fallback
+}
 
 export default defineConfig({
 	plugins: [react()],
