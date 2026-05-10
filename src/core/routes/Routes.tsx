@@ -5,6 +5,7 @@ import { useUser } from '@/hooks/UserContext';
 import { TenantMetadataKey } from '@/models/Tenant';
 import { Suspense } from 'react';
 import { Loader } from '@/components/atoms';
+import { ErrorBoundary } from '@/components/atoms/ErrorBoundary';
 import {
 	// Auth pages
 	Auth,
@@ -264,7 +265,9 @@ export const MainRouter: any = createBrowserRouter([
 		path: RouteNames.home,
 		element: (
 			<AuthMiddleware requiredRole={['admin']}>
-				<MainLayout />
+				<ErrorBoundary>
+					<MainLayout />
+				</ErrorBoundary>
 			</AuthMiddleware>
 		),
 		errorElement: <RouterErrorElement />,
