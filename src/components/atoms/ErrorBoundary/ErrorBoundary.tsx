@@ -340,9 +340,17 @@ export const ErrorBoundary = ({ children, fallback, onError, name = 'unnamed' }:
 // Router Error Element - Used with React Router's errorElement
 export const RouterErrorElement = () => {
 	const error = useRouteError() as Error;
-	const errorId = logError(error);
+	logError(error);
 
-	return <ErrorFallback error={error} errorId={errorId} resetError={() => (window.location.href = RouteNames.home)} />;
+	// Auto-redirect to home after a brief delay to avoid showing error page on transient crashes
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			window.location.href = RouteNames.home;
+		}, 100);
+		return () => clearTimeout(timer);
+	}, []);
+
+	return null;
 };
 
 export default ErrorBoundary;

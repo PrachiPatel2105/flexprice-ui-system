@@ -274,9 +274,7 @@ export const MainRouter: any = createBrowserRouter([
 		path: RouteNames.home,
 		element: (
 			<AuthMiddleware requiredRole={['admin']}>
-				<ErrorBoundary>
-					<MainLayout />
-				</ErrorBoundary>
+				<MainLayout />
 			</AuthMiddleware>
 		),
 		errorElement: <RouterErrorElement />,
