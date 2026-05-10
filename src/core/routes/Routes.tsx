@@ -196,18 +196,22 @@ export const RouteNames = {
 
 const DefaultRoute = () => {
 	const { user } = useUser();
+	const noBackend = !import.meta.env.VITE_API_URL;
 
-	// No backend configured — go straight to dashboard
-	if (!import.meta.env.VITE_API_URL) {
-		return <Navigate to={RouteNames.homeDashboard} />;
+	// No backend — check Supabase session via AuthMiddleware (handled there)
+	// If we reach here with noBackend, AuthMiddleware already verified session
+	if (noBackend) {
+		return <Navigate to={RouteNames.homeDashboard} replace />;
 	}
 
-	if (!user) {
-		return <Navigate to={RouteNames.auth} />;
+	// With backend — redirect to login if no user
+	if (!user || (typeof user === 'object' && Object.keys(user).length === 0)) {
+		return <Navigate to={RouteNames.auth} replace />;
 	}
+
 	const onboardingMetadata = user?.tenant?.metadata?.[TenantMetadataKey.ONBOARDING_COMPLETED];
 	const onboardingCompleted = onboardingMetadata === 'true';
-	return <Navigate to={onboardingCompleted ? RouteNames.homeDashboard : RouteNames.onboarding} />;
+	return <Navigate to={onboardingCompleted ? RouteNames.homeDashboard : RouteNames.onboarding} replace />;
 };
 
 export const MainRouter: any = createBrowserRouter([

@@ -27,6 +27,11 @@ const axiosClient: AxiosInstance = axios.create({
 
 axiosClient.interceptors.request.use(
 	async (config: InternalAxiosRequestConfig) => {
+		// Block all requests when no API URL is configured
+		if (!API_URL) {
+			return Promise.reject(new Error('No API URL configured'));
+		}
+
 		// Customer portal mode: only X-Session-Token needed
 		if (runtimeCredentials) {
 			config.headers['X-Session-Token'] = runtimeCredentials.sessionToken;
@@ -57,6 +62,9 @@ axiosClient.interceptors.response.use(
 		return response.data;
 	},
 	async (error) => {
+		// Silently ignore errors when no backend is configured
+		if (!API_URL) return Promise.reject(error);
+
 		if (error.response) {
 			switch (error.response.status) {
 				case 401:

@@ -20,6 +20,14 @@ import Chip from '@/components/atoms/Chip/Chip';
 const meta: Meta = {
 	title: 'Advanced/QueryConfig',
 	tags: ['autodocs'],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					'`createQueryConfig` wraps TanStack Query options with FlexPrice-specific caching defaults. Supports three presets — REALTIME (no cache), DEFAULT (5 min stale), and STATIC (30 min stale) — plus per-call overrides.',
+			},
+		},
+	},
 };
 
 export default meta;
@@ -27,6 +35,9 @@ type Story = StoryObj;
 
 // ─── Preset Documentation ─────────────────────────────────────────────────────
 
+/**
+ * Documents all available query cache presets and their intended use cases.
+ */
 export const PresetDocumentation: Story = {
 	render: () => (
 		<div className='space-y-4 p-4 max-w-2xl'>
@@ -161,12 +172,17 @@ const QueryDemo = ({ preset }: { preset: 'REALTIME' | 'DEFAULT' | 'STATIC' }) =>
 
 const queryClient = createClient();
 
+/**
+ * Live demo showing all three presets side-by-side.
+ * Click "Trigger Refetch" on each card to observe caching behaviour differences.
+ */
 export const LiveCachingDemo: Story = {
 	render: () => (
 		<QueryClientProvider client={queryClient}>
 			<div className='space-y-4 p-4'>
 				<p className='text-sm text-muted-foreground'>
-					Each card uses a different caching preset. Click "Trigger Refetch" to see how each preset behaves.
+					Each card uses a different caching preset. Click "Trigger Refetch" to see how each preset behaves — REALTIME always fetches,
+					DEFAULT serves from cache for 5 min, STATIC serves from cache for 30 min.
 				</p>
 				<div className='grid grid-cols-3 gap-4'>
 					<QueryDemo preset='REALTIME' />
@@ -176,4 +192,12 @@ export const LiveCachingDemo: Story = {
 			</div>
 		</QueryClientProvider>
 	),
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Live demo of all three caching presets. REALTIME always fetches fresh data, DEFAULT caches for 5 minutes, STATIC caches for 30 minutes.',
+			},
+		},
+	},
 };

@@ -24,6 +24,9 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({ children }) => {
 		supabase.auth.getSession().then((result: { data: { session: unknown } }) => {
 			setHasSession(!!result.data?.session);
 			setSessionChecked(true);
+		}).catch(() => {
+			setHasSession(false);
+			setSessionChecked(true);
 		});
 	}, [noBackend]);
 
@@ -36,13 +39,13 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({ children }) => {
 	// No backend mode — use Supabase session as auth source
 	if (noBackend) {
 		if (!sessionChecked) return <PageLoader />;
-		if (!hasSession) return <Navigate to='/auth' />;
+		if (!hasSession) return <Navigate to='/auth' replace />;
 		return <>{children}</>;
 	}
 
 	// Backend mode — use API user
 	if (loading) return <PageLoader />;
-	if (error || !user) return <Navigate to='/auth' />;
+	if (error || !user) return <Navigate to='/auth' replace />;
 	return <>{children}</>;
 };
 

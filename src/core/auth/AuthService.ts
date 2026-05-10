@@ -40,11 +40,15 @@ class AuthService {
 	}
 
 	public static async logout() {
-		if (NODE_ENV != NodeEnv.SELF_HOSTED) {
-			await supabase.auth.signOut();
+		try {
+			if (NODE_ENV != NodeEnv.SELF_HOSTED) {
+				await supabase.auth.signOut();
+			}
+		} catch {
+			// ignore signout errors
 		}
 		localStorage.clear();
-		window.location.href = RouteNames.login;
+		window.location.href = RouteNames.auth;
 	}
 }
 

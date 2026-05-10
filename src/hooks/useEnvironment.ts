@@ -21,6 +21,8 @@ interface UseEnvironment {
 }
 
 export const useEnvironment = (pollingInterval: number = 30000): UseEnvironment => {
+	const noBackend = !import.meta.env.VITE_API_URL;
+
 	// Fetch environments from API
 	const { data, isLoading, isError, refetch } = useQuery({
 		queryKey: ['environments'],
@@ -28,6 +30,7 @@ export const useEnvironment = (pollingInterval: number = 30000): UseEnvironment 
 			const res = await EnvironmentApi.getAllEnvironments();
 			return res.environments;
 		},
+		enabled: !noBackend,
 		staleTime: 5 * 60 * 1000, // 5 minutes
 	});
 
