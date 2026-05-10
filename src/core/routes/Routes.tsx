@@ -195,6 +195,12 @@ export const RouteNames = {
 
 const DefaultRoute = () => {
 	const { user } = useUser();
+
+	// No backend configured — go straight to dashboard
+	if (!import.meta.env.VITE_API_URL) {
+		return <Navigate to={RouteNames.homeDashboard} />;
+	}
+
 	if (!user) {
 		return <Navigate to={RouteNames.auth} />;
 	}
