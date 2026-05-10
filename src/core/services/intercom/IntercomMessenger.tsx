@@ -22,10 +22,14 @@ const IntercomMessenger = () => {
 	const hideEventTriggered = useRef(false);
 
 	const openIntercom = useCallback(() => {
-		// @ts-expect-error - Intercom types don't include messenger
-		window.Intercom('show');
-		isIntercomOpen.current = true;
-		hideEventTriggered.current = false;
+		try {
+			// @ts-expect-error - Intercom types don't include messenger
+			window.Intercom('show');
+			isIntercomOpen.current = true;
+			hideEventTriggered.current = false;
+		} catch (error) {
+			console.warn('[Intercom] Failed to open:', error);
+		}
 	}, []);
 
 	// Open from command palette (Cmd+K → Open Intercom)
@@ -157,16 +161,21 @@ const IntercomMessenger = () => {
 	useEffect(() => {
 		if (!user || isInitialized.current) return;
 
-		Intercom({
-			app_id: 'yprjoygg',
-			user_id: user.id,
-			name: user.tenant?.name,
-			email: user.email,
-			created_at: user.tenant?.created_at ? new Date(user.tenant.created_at).getTime() : undefined,
-			hide_default_launcher: true,
-		});
+		try {
+			Intercom({
+				app_id: 'yprjoygg',
+				user_id: user.id,
+				name: user.tenant?.name,
+				email: user.email,
+				created_at: user.tenant?.created_at ? new Date(user.tenant.created_at).getTime() : undefined,
+				hide_default_launcher: true,
+			});
 
-		isInitialized.current = true;
+			isInitialized.current = true;
+		} catch (error) {
+			console.warn('[Intercom] Failed to initialize:', error);
+			return;
+		}
 
 		// Add event listeners for Intercom events
 		const handleMessage = (event: MessageEvent) => {
