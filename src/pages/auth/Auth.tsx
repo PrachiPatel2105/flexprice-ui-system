@@ -22,6 +22,8 @@ const AuthPage: React.FC = () => {
 		if (searchParams.get('tab') === AuthTab.RESET_PASSWORD) {
 			return;
 		}
+		// Only auto-redirect if backend is configured
+		if (!import.meta.env.VITE_API_URL) return;
 		const fetchUser = async () => {
 			const tokenStr = await AuthService.getAcessToken();
 			if (tokenStr) {

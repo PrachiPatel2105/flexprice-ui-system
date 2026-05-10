@@ -342,15 +342,7 @@ export const RouterErrorElement = () => {
 	const error = useRouteError() as Error;
 	logError(error);
 
-	// Auto-redirect to home after a brief delay to avoid showing error page on transient crashes
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			window.location.href = RouteNames.home;
-		}, 100);
-		return () => clearTimeout(timer);
-	}, []);
-
-	return null;
+	return <ErrorFallback error={error} errorId={generateErrorId()} resetError={() => (window.location.href = RouteNames.auth)} />;
 };
 
 export default ErrorBoundary;
