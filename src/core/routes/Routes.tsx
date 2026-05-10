@@ -214,31 +214,38 @@ export const MainRouter: any = createBrowserRouter([
 	// public routes
 	{
 		path: RouteNames.login,
-		element: <Auth />,
+		element: <ErrorBoundary><Auth /></ErrorBoundary>,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.auth,
-		element: <Auth />,
+		element: <ErrorBoundary><Auth /></ErrorBoundary>,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.signupConfirmation,
 		element: <SignupConfirmation />,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.resendVerification,
 		element: <ResendVerification />,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.verifyEmail,
 		element: <EmailVerification />,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.customerPortal,
 		element: <CustomerPortalWrapper />,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.checkout,
 		element: <CheckoutPage />,
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.onboarding,
@@ -247,6 +254,7 @@ export const MainRouter: any = createBrowserRouter([
 				<OnboardingTenant />
 			</AuthMiddleware>
 		),
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.pricingSetup,
@@ -255,6 +263,7 @@ export const MainRouter: any = createBrowserRouter([
 				<PricingSetupPage />
 			</AuthMiddleware>
 		),
+		errorElement: <RouterErrorElement />,
 	},
 	{
 		path: RouteNames.checkout,

@@ -1,4 +1,3 @@
-import { includes } from 'lodash';
 import { Region } from '@/types/enums/Region';
 
 export interface DashboardUrls {
@@ -53,8 +52,8 @@ export const detectCurrentRegion = (): Region | null => {
 		return null; // No valid URLs configured
 	}
 
-	// Use lodash includes to check if current origin matches any region
-	if (includes(origins, currentOrigin)) {
+	// Use native includes to check if current origin matches any region
+	if (origins.includes(currentOrigin)) {
 		switch (currentOrigin) {
 			case indiaOrigin:
 				return Region.INDIA;
