@@ -1,7 +1,7 @@
 import supabase from '@/core/services/supbase/config';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { data, useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useUser } from '@/hooks/UserContext';
 import { Button, Input } from '@/components/atoms';
 import { EyeIcon, EyeOff } from 'lucide-react';
@@ -61,7 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ switchTab }) => {
 			navigate(RouteNames.home);
 		},
 		onError: (error: ServerError) => {
-			toast.error(error.error.message || 'Something went wrong. Please try again.');
+			toast.error(error?.error?.message || 'Something went wrong. Please try again.');
 		},
 	});
 
@@ -86,7 +86,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ switchTab }) => {
 				return;
 			}
 
-			userContext.setUser(data);
+			userContext.setUser(null);
 			navigate('/');
 			toast.success('Login successful');
 		} else {
