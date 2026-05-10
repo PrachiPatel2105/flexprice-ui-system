@@ -22,15 +22,15 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({ children }) => {
 		return <PageLoader />;
 	}
 
+	// If no backend is configured, skip user check and render children
+	if (!import.meta.env.VITE_API_URL) {
+		return <div>{children}</div>;
+	}
+
 	if (error || !user) {
 		return <Navigate to='/auth' />;
 	}
 
-	// if (requiredRole && !requiredRole.includes(user.role)) {
-	//     return <Navigate to="/not-authorized" />;
-	// }
-
-	// Wrap children with AuthStateListener to handle auth state changes
 	return <div>{children}</div>;
 };
 
