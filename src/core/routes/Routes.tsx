@@ -285,7 +285,7 @@ export const MainRouter: any = createBrowserRouter([
 			},
 			{
 				path: RouteNames.homeDashboard,
-				element: <DashboardPage />,
+				element: <ErrorBoundary fallback={<div className='p-8 text-center text-muted-foreground'>Dashboard unavailable</div>}><DashboardPage /></ErrorBoundary>,
 			},
 			{
 				path: RouteNames.productCatalog,

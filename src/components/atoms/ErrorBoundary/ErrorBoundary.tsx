@@ -342,6 +342,9 @@ export const RouterErrorElement = () => {
 	const error = useRouteError() as Error;
 	logError(error);
 
+	// Log to console for debugging
+	console.error('[RouterError]', error?.message, error?.stack);
+
 	return <ErrorFallback error={error} errorId={generateErrorId()} resetError={() => (window.location.href = RouteNames.auth)} />;
 };
 
